@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block title %}Exam Result | ExamEase{% endblock %}
+{% block content %}
+<div class="result-card">
+    <h1>Examination Result</h1>
+    <h2>{{ attempt.title }}</h2>
+
+    <p class="score">
+        {{ attempt.score }} / {{ attempt.total_marks }}
+    </p>
+
+    <p>Percentage: {{ percentage }}%</p>
+
+    {% if percentage >= 40 %}
+        <p class="pass">Passed</p>
+    {% else %}
+        <p class="fail">Not passed</p>
+    {% endif %}
+
+    <a class="btn" href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+</div>
+{% endblock %}

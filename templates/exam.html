@@ -1,0 +1,55 @@
+
+{% extends "base.html" %}
+{% block title %}{{ exam.title }} | ExamEase{% endblock %}
+{% block content %}
+<h1>{{ exam.title }}</h1>
+<p>{{ exam.description or 'Choose the best answer for each question.' }}</p>
+
+<div class="timer-box">
+    Time remaining: <strong id="timer">Loading...</strong>
+</div>
+
+<form id="exam-form" method="post">
+    {% for q in questions %}
+        <section class="panel">
+            <h3>{{ loop.index }}. {{ q.question_text }}</h3>
+            <p>Marks: {{ q.marks }}</p>
+
+            {% for letter, option in [
+                ('A', q.option_a), ('B', q.option_b),
+                ('C', q.option_c), ('D', q.option_d)
+            ] %}
+                <label class="option">
+                    <input type="radio" name="q_{{ q.id }}"
+                           value="{{ letter }}">
+                    {{ letter }}. {{ option }}
+                </label>
+            {% endfor %}
+        </section>
+    {% endfor %}
+
+    <button class="btn" type="submit">Submit Examination</button>
+</form>
+
+<script>
+    let remaining = {{ exam.duration_minutes }} * 60;
+    const timer = document.getElementById("timer");
+    const form = document.getElementById("exam-form");
+
+    function updateTimer() {
+        const minutes = Math.floor(remaining / 60);
+        const seconds = remaining % 60;
+        timer.textContent =
+            `${minutes}:${String(seconds).padStart(2, "0")}`;
+
+        if (remaining <= 0) {
+            form.requestSubmit();
+            return;
+        }
+        remaining--;
+        setTimeout(updateTimer, 1000);
+    }
+
+    updateTimer();
+</script>
+{% endblock %}

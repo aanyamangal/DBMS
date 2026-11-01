@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ExamEase{% endblock %}</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="brand" href="{{ url_for('home') }}">ExamEase</a>
+        {% if session.get('user_id') %}
+            <span>{{ session.get('name') }}</span>
+            <form action="{{ url_for('logout') }}" method="post">
+                <button class="btn btn-light" type="submit">Logout</button>
+            </form>
+        {% endif %}
+    </nav>
+
+    <main class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="notice">{{ message }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

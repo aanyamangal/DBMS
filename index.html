@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Examination Management System</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b}
+header{background:#172554;color:white;text-align:center;padding:22px}
+nav{background:#0f172a;padding:12px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+nav button{background:#334155;color:white;border:0;padding:10px 12px;border-radius:5px;cursor:pointer}
+nav button:hover{background:#2563eb}
+.container{max-width:850px;margin:25px auto;padding:25px;background:white;border-radius:12px;box-shadow:0 4px 12px #0001}
+.hidden{display:none}
+h2{color:#1e3a8a}
+input{padding:11px;width:100%;margin:8px 0 15px;border:1px solid #cbd5e1;border-radius:5px}
+button.action{background:#2563eb;color:white;border:0;padding:11px 16px;border-radius:5px;cursor:pointer;margin:5px 4px 5px 0}
+.card{background:#eff6ff;padding:17px;margin:12px 0;border-radius:8px}
+.question{padding:15px 0;border-bottom:1px solid #ddd}
+.question label{display:block;margin:10px 0}
+.question input{width:auto;margin:0 8px 0 0}
+footer{text-align:center;padding:20px;color:#64748b}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Online Examination Management System</h1>
+<p>Student Portal | Admin Portal | Examination & Results</p>
+</header>
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('login')">Student Login</button>
+<button onclick="show('register')">Register</button>
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('exam')">Take Exam</button>
+<button onclick="show('results')">Results</button>
+<button onclick="show('adminLogin')">Admin</button>
+</nav>
+
+<section id="home" class="container">
+<h2>Welcome to Online Examination</h2>
+<p>A simple online examination system for students to take tests and view results.</p>
+<div class="card"><h3>Student Portal</h3><p>Register and access your dashboard.</p><button class="action" onclick="show('register')">Register Now</button></div>
+<div class="card"><h3>Online Examination</h3><p>Attempt multiple-choice questions.</p><button class="action" onclick="show('exam')">Start Exam</button></div>
+<div class="card"><h3>Admin Portal</h3><p>View demo exams, students and results.</p><button class="action" onclick="show('adminLogin')">Admin Login</button></div>
+</section>
+
+<section id="login" class="container hidden">
+<h2>Student Login</h2>
+<form onsubmit="studentLogin(event)">
+<label>Email</label><input id="loginEmail" type="email" required placeholder="Enter email">
+<label>Password</label><input type="password" required placeholder="Enter password">
+<button class="action">Login</button>
+</form>
+<p>New student? <a href="#" onclick="show('register');return false">Register here</a></p>
+</section>
+
+<section id="register" class="container hidden">
+<h2>Student Registration</h2>
+<form onsubmit="register(event)">
+<label>Full Name</label><input id="regName" required placeholder="Enter full name">
+<label>Email</label><input id="regEmail" type="email" required placeholder="Enter email">
+<label>Password</label><input type="password" required placeholder="Create password">
+<button class="action">Register</button>
+</form>
+</section>
+
+<section id="dashboard" class="container hidden">
+<h2>Student Dashboard</h2>
+<p id="welcome">Welcome, Student!</p>
+<div class="card"><h3>Web Development Examination</h3><p>Questions: 5 | Total Marks: 5</p><button class="action" onclick="show('exam')">Start Examination</button></div>
+<div class="card"><h3>Check Performance</h3><p id="dashScore">No result available yet.</p><button class="action" onclick="show('results')">View Results</button></div>
+</section>
+
+<section id="exam" class="container hidden">
+<h2>Web Development Examination</h2>
+<p>Each question carries one mark. Select one answer per question.</p>
+<form id="examForm" onsubmit="submitExam(event)">
+<div class="question"><b>1. What does HTML stand for?</b>
+<label><input type="radio" name="q1" value="0" required> Hyper Text Makeup Language</label>
+<label><input type="radio" name="q1" value="1"> Hyper Text Markup Language</label>
+<label><input type="radio" name="q1" value="2"> High Text Machine Language</label></div>
+<div class="question"><b>2. Which language styles a webpage?</b>
+<label><input type="radio" name="q2" value="0" required> HTML</label>
+<label><input type="radio" name="q2" value="1"> CSS</label>
+<label><input type="radio" name="q2" value="2"> SQL</label></div>
+<div class="question"><b>3. Which language adds interactivity?</b>
+<label><input type="radio" name="q3" value="0" required> JavaScript</label>
+<label><input type="radio" name="q3" value="1"> SQL</label>
+<label><input type="radio" name="q3" value="2"> HTML only</label></div>
+<div class="question"><b>4. Which SQL command retrieves data?</b>
+<label><input type="radio" name="q4" value="0" required> DELETE</label>
+<label><input type="radio" name="q4" value="1"> SELECT</label>
+<label><input type="radio" name="q4" value="2"> UPDATE</label></div>
+<div class="question"><b>5. What does DBMS stand for?</b>
+<label><input type="radio" name="q5" value="0" required> Database Management System</label>
+<label><input type="radio" name="q5" value="1"> Digital Base Machine Service</label>
+<label><input type="radio" name="q5" value="2"> Data Backup Software</label></div>
+<button class="action" type="submit">Submit Examination</button>
+</form>
+</section>
+
+<section id="results" class="container hidden">
+<h2>Examination Results</h2>
+<div class="card"><h3 id="score">No exam attempted yet.</h3><p id="remark"></p></div>
+<button class="action" onclick="show('exam')">Attempt Again</button>
+</section>
+
+<section id="adminLogin" class="container hidden">
+<h2>Administrator Login</h2>
+<p>Demo username: <b>admin</b> | Password: <b>admin123</b></p>
+<form onsubmit="adminLogin(event)">
+<label>Username</label><input id="adminUser" required>
+<label>Password</label><input id="adminPass" type="password" required>
+<button class="action">Login as Admin</button>
+</form>
+</section>
+
+<section id="adminDashboard" class="container hidden">
+<h2>Admin Dashboard</h2>
+<div class="card"><h3>Manage Examinations</h3><p>Web Development Fundamentals</p><p>Questions: 5 | Total Marks: 5</p></div>
+<div class="card"><h3>Registered Students</h3><p id="studentCount">Total students: 0</p><ul id="studentList"></ul></div>
+<div class="card"><h3>Student Results</h3><ul id="resultList"><li>No attempts yet.</li></ul></div>
+<button class="action" onclick="show('home')">Logout</button>
+</section>
+
+<footer>Online Examination Management System</footer>
+
+<script>
+let students=[];
+let currentStudent="Student";
+let attempts=[];
+let lastScore=null;
+
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+window.scrollTo(0,0);
+if(id==="adminDashboard") updateAdmin();
+if(id==="dashboard" && lastScore!==null)
+document.getElementById("dashScore").textContent="Latest score: "+lastScore+"/5";
+}
+
+function studentLogin(e){
+e.preventDefault();
+let email=document.getElementById("loginEmail").value;
+let student=students.find(s=>s.email===email);
+currentStudent=student?student.name:email.split("@")[0];
+document.getElementById("welcome").textContent="Welcome, "+currentStudent+"!";
+alert("Demo login successful!");
+show("dashboard");
+}
+
+function register(e){
+e.preventDefault();
+let name=document.getElementById("regName").value.trim();
+let email=document.getElementById("regEmail").value.trim();
+if(students.some(s=>s.email.toLowerCase()===email.toLowerCase())){
+alert("This email is already registered.");return;
+}
+students.push({name:name,email:email});
+currentStudent=name;
+document.getElementById("welcome").textContent="Welcome, "+name+"!";
+alert("Registration successful!");
+e.target.reset();
+show("dashboard");
+}
+
+function submitExam(e){
+e.preventDefault();
+let data=new FormData(e.target);
+let answers={q1:"1",q2:"1",q3:"0",q4:"1",q5:"0"};
+let score=0;
+for(let q in answers){
+if(data.get(q)===answers[q])score++;
+}
+lastScore=score;
+attempts.push({name:currentStudent,score:score});
+document.getElementById("score").textContent="Your Score: "+score+" / 5 ("+(score*20)+"%)";
+document.getElementById("remark").textContent=score>=3?"Status: Passed. Well done!":"Keep practising and try again.";
+e.target.reset();
+show("results");
+}
+
+function adminLogin(e){
+e.preventDefault();
+if(document.getElementById("adminUser").value==="admin" &&
+document.getElementById("adminPass").value==="admin123"){
+alert("Admin login successful!");
+show("adminDashboard");
+}else{
+alert("Incorrect credentials. Use admin / admin123.");
+}
+}
+
+function updateAdmin(){
+document.getElementById("studentCount").textContent="Total students: "+students.length;
+document.getElementById("studentList").innerHTML=students.length?
+students.map(s=>"<li>"+escapeText(s.name)+" ("+escapeText(s.email)+")</li>").join(""):"<li>No students registered yet.</li>";
+document.getElementById("resultList").innerHTML=attempts.length?
+attempts.map(a=>"<li>"+escapeText(a.name)+": "+a.score+"/5 ("+(a.score*20)+"%)</li>").join(""):"<li>No attempts yet.</li>";
+}
+function escapeText(value){
+let el=document.createElement("span");
+el.textContent=value;
+return el.innerHTML;
+}
+show("home");
+</script>
+</body>
+</html>

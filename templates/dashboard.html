@@ -1,0 +1,106 @@
+
+{% extends "base.html" %}
+{% block title %}Dashboard | ExamEase{% endblock %}
+{% block content %}
+
+<h1>Dashboard</h1>
+<p>Welcome, {{ session.get('name') }}!</p>
+
+{% if session.get('role') == 'admin' %}
+    <section class="panel">
+        <h2>Create a New Exam</h2>
+        <form action="{{ url_for('create_exam') }}" method="post">
+            <label>Exam title</label>
+            <input name="title" maxlength="150" required>
+
+            <label>Description</label>
+            <input name="description" maxlength="500">
+
+            <label>Duration (minutes)</label>
+            <input type="number" name="duration"
+                   min="1" max="240" value="30" required>
+
+            <button class="btn" type="submit">Create Exam</button>
+        </form>
+    </section>
+
+    <h2>Manage Exams</h2>
+    {% for exam in exams %}
+        <section class="panel">
+            <h3>{{ exam.title }}</h3>
+            <p>{{ exam.description or 'No description' }}</p>
+            <p>Duration: {{ exam.duration_minutes }} minutes</p>
+            <p>Questions: {{ exam.question_count }}</p>
+            <p>Total marks: {{ exam.total_marks }}</p>
+
+            <details>
+                <summary>Add a question</summary>
+                <form action="{{ url_for('add_question', exam_id=exam.id) }}"
+                      method="post">
+                    <label>Question</label>
+                    <textarea name="question" required></textarea>
+
+                    <label>Option A</label>
+                    <input name="option_a" required>
+
+                    <label>Option B</label>
+                    <input name="option_b" required>
+
+                    <label>Option C</label>
+                    <input name="option_c" required>
+
+                    <label>Option D</label>
+                    <input name="option_d" required>
+
+                    <label>Correct option</label>
+                    <select name="correct" required>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+
+                    <label>Marks</label>
+                    <input type="number" name="marks"
+                           min="1" value="1" required>
+
+                    <button class="btn" type="submit">Save Question</button>
+                </form>
+            </details>
+        </section>
+    {% else %}
+        <p>No exams created yet.</p>
+    {% endfor %}
+
+{% else %}
+    <h2>Available Examinations</h2>
+    {% for exam in exams %}
+        <section class="panel">
+            <h3>{{ exam.title }}</h3>
+            <p>{{ exam.description or 'Online MCQ examination' }}</p>
+            <p>Duration: {{ exam.duration_minutes }} minutes</p>
+            <p>Total marks: {{ exam.total_marks }}</p>
+            <a class="btn" href="{{ url_for('take_exam', exam_id=exam.id) }}">
+                Start Exam
+            </a>
+        </section>
+    {% else %}
+        <p>No new examinations are available.</p>
+    {% endfor %}
+
+    <h2>My Results</h2>
+    {% for result in results %}
+        <section class="panel">
+            <strong>{{ result.title }}</strong>
+            <p>Score: {{ result.score }}</p>
+            <p>Submitted: {{ result.submitted_at }}</p>
+            <a href="{{ url_for('result', attempt_id=result.id) }}">
+                View result
+            </a>
+        </section>
+    {% else %}
+        <p>You have not submitted any exams yet.</p>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
