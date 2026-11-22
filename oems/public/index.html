@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OEMS Login</title><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="login"><div class="card"><h2 class="brand" style="padding:0">Online Examination Management System</h2><p class="mut">DBMS Capstone · Demo Portal</p>
+<div class="tabs"><button class="btn" id="ts">Student</button><button class="btn sec" id="ta">Admin</button></div>
+<label>Email</label><input id="em" type="email" value="student1@exam.demo"><label>Password</label><input id="pw" type="password" value="Student@123"><div class="err" id="er"></div>
+<button class="btn" style="width:100%" id="go">Sign in</button>
+<p class="mut" style="font-size:12px">Demo: student1@exam.demo / Student@123 · admin@exam.demo / Admin@123</p></div></div>
+<script src="js/demo-data.js"></script><script src="js/common.js"></script><script>
+let role='student';const set=r=>{role=r;$('#ts').className='btn'+(r=='student'?'':' sec');$('#ta').className='btn'+(r=='admin'?'':' sec');$('#em').value=r=='admin'?'admin@exam.demo':'student1@exam.demo';$('#pw').value=r=='admin'?'Admin@123':'Student@123'};
+$('#ts').onclick=()=>set('student');$('#ta').onclick=()=>set('admin');
+function login(){const e=$('#em').value.trim(),p=$('#pw').value;if(!/^\S+@\S+\.\S+$/.test(e)||!p){$('#er').textContent='Enter a valid email and password';return}
+ const u=DB.users.find(x=>x.email==e&&x.password==p&&x.role==role);if(!u){$('#er').textContent='Invalid credentials for '+role+' portal';return}
+ if(u.status!='active'){$('#er').textContent='Account inactive';return}sessionStorage.setItem('uid',u.id);log('LOGIN',e);location.href=role+'.html'}
+$('#go').onclick=login;document.addEventListener('keydown',e=>e.key=='Enter'&&login());
+</script></body></html>
