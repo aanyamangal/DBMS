@@ -1,4 +1,4 @@
-# 📚 DBMS — Database Management Systems
+# 📚 DBMS — Database Management Systems (https://capstone-project-dbms.vercel.app/) - CAPSTONE VERCEL LINK
 
 A collection of Database Management Systems (DBMS) laboratory exercises, SQL implementations, PL/pgSQL resources, and a capstone project.
 
